@@ -508,6 +508,7 @@ autoplot.ggmultiplot <- function(object, ...) {
 #' @param frame.colour Colour for frame
 #' @param frame.level Passed for \code{ggplot2::stat_ellipse} 's level. Ignored in 'convex'.
 #' @param frame.alpha Alpha for frame
+#' @param environment Environment where aesthetic variables are evaluated.
 #' @inheritParams post_autoplot
 #' @param ... other arguments passed to methods
 #' @return ggplot
@@ -551,8 +552,11 @@ ggbiplot <- function(plot.data, loadings.data = NULL,
                      frame.alpha = 0.2,
                      xlim = c(NA, NA), ylim = c(NA, NA), log = "",
                      main = NULL, xlab = NULL, ylab = NULL, asp = NULL,
+                     environment = parent.frame(),
                      ...) {
 #  print(label.position)
+
+  colour.expression <- substitute(colour)
 
   if (!is.null(loadings.cutoff) &&
       (!is.numeric(loadings.cutoff) || length(loadings.cutoff) != 1L ||
@@ -581,6 +585,22 @@ ggbiplot <- function(plot.data, loadings.data = NULL,
       loadings.label.colour <- arguments[["loadings.label.color"]]
     } else {
       warning("both 'loadings.label.colour=' and 'loadings.label.color=' found, ignoring 'loadings.label.color='")
+    }
+  }
+
+  if (is.symbol(colour.expression) &&
+      length(colour) == nrow(plot.data)) {
+    colour.name <- as.character(colour.expression)
+    environment.colour <- get0(colour.name, envir = environment,
+                               inherits = TRUE)
+    if (identical(colour, environment.colour)) {
+      if (colour.name %in% colnames(plot.data)) {
+        colour.name <- make.unique(c(colnames(plot.data), colour.name))[
+          ncol(plot.data) + 1L
+        ]
+      }
+      plot.data[[colour.name]] <- colour
+      colour <- colour.name
     }
   }
 

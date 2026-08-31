@@ -716,6 +716,23 @@ test_that('autoplot.prcomp works for USArrests', {
   expect_equal(ld$colour, rep("#000000", 6))
 })
 
+test_that('autoplot.prcomp maps colour variables from the environment (#135)', {
+  species <- as.numeric(factor(iris[, 'Species']))
+
+  p <- expect_no_warning(
+    ggplot2::autoplot(
+      stats::prcomp(iris[, 1:4]),
+      colour = species,
+      environment = environment()
+    )
+  )
+
+  expect_equal(p$data$species, species)
+  expect_equal(rlang::as_name(p$layers[[1]]$mapping$colour), 'species')
+  expect_null(p$layers[[1]]$aes_params$colour)
+  expect_length(unique(ggplot2::layer_data(p, 1)$colour), 3L)
+})
+
 test_that('autoplot.princomp works for iris', {
 
   obj <- stats::princomp(iris[-5])

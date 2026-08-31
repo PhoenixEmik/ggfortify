@@ -56,6 +56,7 @@ ggbiplot(
   xlab = NULL,
   ylab = NULL,
   asp = NULL,
+  environment = parent.frame(),
   ...
 )
 }
@@ -164,6 +165,8 @@ vectors in the selected two-dimensional component space. Disabled when
 \item{ylab}{character vector or expression for y axis label}
 
 \item{asp}{the y/x aspect ratio}
+
+\item{environment}{Environment where aesthetic variables are evaluated.}
 
 \item{...}{other arguments passed to methods}
 }

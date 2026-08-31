@@ -231,6 +231,7 @@ fortify.lfda <- function(model, data = NULL, ...) {
 #' @param x principal component number used in x axis
 #' @param y principal component number used in y axis
 #' @param variance_percentage show the variance explained by the principal component?
+#' @param environment Environment where aesthetic variables are evaluated.
 #' @param ... other arguments passed to [ggbiplot()]
 #' @aliases autoplot.prcomp autoplot.princomp autoplot.factanal
 #' @examples
@@ -264,7 +265,8 @@ fortify.lfda <- function(model, data = NULL, ...) {
 #' @export
 autoplot.pca_common <- function(object, data = NULL,
                                 scale = 1.0, x = 1, y = 2,
-                                variance_percentage = TRUE, ...) {
+                                variance_percentage = TRUE,
+                                environment = parent.frame(), ...) {
 
   plot.data <- ggplot2::fortify(object, data = data)
   plot.data$rownames <- rownames(plot.data)
@@ -350,7 +352,8 @@ autoplot.pca_common <- function(object, data = NULL,
   p <- ggbiplot(plot.data = plot.data,
                 loadings.data = loadings.data,
                 xlab = xlab,
-                ylab = ylab, ...)
+                ylab = ylab,
+                environment = environment, ...)
   return(p)
 }
 

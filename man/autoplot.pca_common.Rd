@@ -14,6 +14,7 @@
   x = 1,
   y = 2,
   variance_percentage = TRUE,
+  environment = parent.frame(),
   ...
 )
 }
@@ -29,6 +30,8 @@
 \item{y}{principal component number used in y axis}
 
 \item{variance_percentage}{show the variance explained by the principal component?}
+
+\item{environment}{Environment where aesthetic variables are evaluated.}
 
 \item{...}{other arguments passed to [ggbiplot()]}
 }
